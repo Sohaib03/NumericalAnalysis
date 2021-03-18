@@ -3,10 +3,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Constants
 k = 0.5
 pt = 3
+previousRoot = np.NaN
+delta = 0.000000000001
 
 
+#Dictionary for the table
 table = {
     "Iteration": [],
     "Low" : [],
@@ -16,8 +20,6 @@ table = {
 }
 
 def f(x):
-    if (x == 0):
-        return 0
     if (x == 1):
         return np.NaN
     return (x / (1 - x))  * sqrt((2 * pt) / (2 + x)) - k
@@ -49,10 +51,16 @@ def plotError():
     plt.grid(True)
     plt.show()
     
-def bisection(low, high, error, max_iteration = 20):
+def bisection(low, high, error, max_iteration = 30):
+    global previousRoot
+    
     mid = (low + high) / 2
     
-    current_error = (high - low) / (high + low);
+    current_error = np.NaN;
+    if (mid == 0):
+        mid += delta
+    if (previousRoot != np.NaN):
+        current_error = abs(previousRoot - mid) / mid;
     table["Iteration"].append(20 - max_iteration + 1)
     table["Low"].append(low)
     table["High"].append(high)
@@ -61,15 +69,15 @@ def bisection(low, high, error, max_iteration = 20):
     
     if (max_iteration == 0 or current_error < error):
         return mid
+    
+    previousRoot = mid
 
-    mid_val = f(mid)
-    #print(low, high, mid, mid_val)
-    if (mid_val > 0):
+    if (f(mid) * f(low) < 0):
         return bisection(low, mid, error, max_iteration - 1)
     else:
         return bisection(mid, high, error, max_iteration - 1)
     
-
+# Calls Bisection Without error 
 def bisectionWOError(low, high, max_iteration):
     return bisection(low, high, 0, max_iteration)
     
@@ -78,9 +86,7 @@ plotFunction()
 
 # From the plot we observe the root lies in between 0 and 1
 clearTable()
-print(bisection(0, 1, 0))
-clearTable()
-print(bisectionWOError(0, 1, 30))
+print(bisectionWOError(0, 1, 20))
 plotError()
 df = pd.DataFrame(table)
 print(df)
