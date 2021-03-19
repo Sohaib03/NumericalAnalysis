@@ -56,11 +56,11 @@ def bisection(low, high, error, max_iteration = 30):
     
     mid = (low + high) / 2
     
-    current_error = np.NaN;
+    current_error = np.NaN
     if (mid == 0):
         mid += delta
     if (previousRoot != np.NaN):
-        current_error = abs(previousRoot - mid) / mid;
+        current_error = abs(previousRoot - mid) / mid
     table["Iteration"].append(20 - max_iteration + 1)
     table["Low"].append(low)
     table["High"].append(high)
