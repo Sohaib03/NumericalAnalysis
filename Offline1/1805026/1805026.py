@@ -25,6 +25,7 @@ def f(x):
     return (x / (1 - x))  * sqrt((2 * pt) / (2 + x)) - k
 
 def clearTable():
+    previousRoot = np.NaN
     for key in table.keys():
         table[key] = []
 
@@ -61,12 +62,7 @@ def bisection(low, high, error, max_iteration = 30):
         mid += delta
     if (previousRoot != np.NaN):
         current_error = abs(previousRoot - mid) / mid
-    table["Iteration"].append(20 - max_iteration + 1)
-    table["Low"].append(low)
-    table["High"].append(high)
-    table["Mid"].append(mid)
-    table["Error"].append(current_error)
-    
+
     if (max_iteration == 0 or current_error < error):
         return mid
     
@@ -79,8 +75,30 @@ def bisection(low, high, error, max_iteration = 30):
     
 # Calls Bisection Without error 
 def bisectionWOError(low, high, max_iteration):
-    return bisection(low, high, 0, max_iteration)
+    global previousRoot
     
+    mid = (low + high) / 2
+    
+    current_error = np.NaN
+    if (mid == 0):
+        mid += delta
+    if (previousRoot != np.NaN):
+        current_error = abs(previousRoot - mid) / mid
+    table["Iteration"].append(20 - max_iteration + 1)
+    table["Low"].append(low)
+    table["High"].append(high)
+    table["Mid"].append(mid)
+    table["Error"].append(current_error)
+    
+    if (max_iteration == 0):
+        return mid
+    
+    previousRoot = mid
+
+    if (f(mid) * f(low) < 0):
+        return bisectionWOError(low, mid,  max_iteration - 1)
+    else:
+        return bisectionWOError(mid, high,  max_iteration - 1)
     
 plotFunction()
 
