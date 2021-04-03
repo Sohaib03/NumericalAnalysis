@@ -4,16 +4,23 @@ import sys
 
 d = 0
 
-def guassian_elimination(matrix):
-    global d
+def guassian_elimination(A, B, d):
     
-    n = len(matrix)
-    matrix = np.array(matrix)
+    n = len(A)
+    for i in range(n):
+        A[i].append(B[i])
+    matrix = np.array(A)
     
     if (d==1):
         print(matrix)
 
     for i in range(n):
+        if (matrix[i][i] == 0):
+            for j in range(i+1, n):
+                if (matrix[j][i] != 0):
+                    matrix[[i, j]] = matrix[[j, i]]
+                    break
+
         for j in range(i+1, n):
             matrix[j] -= matrix[i] * (matrix[j][i] / matrix[i][i])
 
@@ -36,16 +43,16 @@ if __name__ == '__main__':
             d = 1
     n = int(input())
 
-    matrix = []
+    A = []
     for i in range(n):
         values = list(map(float, input().split()))
-        matrix.append(values)
-
+        A.append(values)
+    B = []
     for i in range(n):
         value = float(input())
-        matrix[i].append(value)
+        B.append(value)
 
-    solution = guassian_elimination(matrix)
+    solution = guassian_elimination(A, B, d)
 
 
     solution = [round(i, 4) for i in solution]
@@ -61,4 +68,13 @@ if __name__ == '__main__':
 106.8
 177.2
 279.2
+
+3
+2 4 8
+2 4 6 
+1 3 2
+14
+12
+6
+
 """
