@@ -33,14 +33,21 @@ def simpsons_integral(low, high, n, func):
 
 n = int(input("Enter no of intervals : "))
 
-print("The required integral is ", integrate(8, 30, n, func))
+print("The required integral using trapezoid rule is ", integrate(8, 30, n, func))
 
 last = integrate(8, 30, 1, func)
-print("n =", 1, "value = ",last, "error = ", None)
+print("n =", 1, "value = ",round(last, 5), "error = ", None)
 for i in range(2, 6):
     cur =  integrate(8, 30, i, func)
-    print("n =", i, "value = ",cur , "error = ", abs(cur - last) * 100 / cur )
+    print("n =", i, "value = ",round(cur,5) , "error = ", round(abs(cur - last) * 100 / cur, 5) )
     last = cur
     
 
-print("The required integral is ", simpsons_integral(8, 30, n, func))
+print("\n\nThe required integral using simpsons rule is ", simpsons_integral(8, 30, n, func))
+
+last = simpsons_integral(8, 30, 1, func)
+print("n =", 1, "value = ",round(last, 5), "error = ", None)
+for i in range(2, 6):
+    cur =  simpsons_integral(8, 30, i, func)
+    print("n =", i, "value = ",round(cur,5) , "error = ", round(abs(cur - last) * 100 / cur, 5) )
+    last = cur
